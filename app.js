@@ -1,35 +1,28 @@
 const express = require('express')
+const morgan = require('morgan')
 const path = require('path')
-const fs = require('fs')
 
 const app = express()
 
-app.use((req, res, next) => {
-  console.log('Request IP: ' + req.url)
-  console.log('Request date: ' + new Date())
-  next()
-})
+app.use(morgan('short'))
 
+const filePath = path.join(__dirname, 'celine.jpg')
 app.use((req, res, next) => {
-  const filePath = path.join(__dirname, 'static', req.url)
-  fs.stat(filePath, (err, fileInfo) => {
+  res.sendFile(filePath, (err) => {
     if (err) {
-      next()
-      return
+      next(new Error('Error sending file'))
     }
-
-    if (fileInfo.isFile()) {
-      res.sendFile(filePath)
-      return
-    }
-
-    next()
   })
 })
 
-app.use((req, res) => {
-  res.status(404)
-  res.send('File not found')
+app.use((err, req, res, next) => {
+  console.error(err)
+  next(err)
+})
+
+app.use((dropError, req, res, next) => {
+  res.status(500)
+  res.end('Internal server error ')
 })
 
 app.listen(3000, () => {
