@@ -1,0 +1,23 @@
+{
+  "name": "express-book",
+  "version": "0.0.1",
+  "description": "some crap",
+  "private": true,
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "test": "ava",
+    "lint": "standard --verbose | snazzy"
+  },
+  "author": "Arun Seehra",
+  "license": "ISC",
+  "devDependencies": {
+    "ava": "^0.19.1",
+    "snazzy": "^7.0.0",
+    "standard": "^10.0.2"
+  },
+  "dependencies": {
+    "express": "^4.15.2",
+    "morgan": "^1.8.1"
+  }
+}
