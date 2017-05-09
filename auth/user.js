@@ -4,7 +4,9 @@ const User = bookshelf.Model.extend({
   tableName: 'users',
   hasTimestamps: true,
 
-  name: () => this.displayName || this.username
+  name: function () {
+    return this.get('displayName') || this.get('username')
+  }
 })
 
 module.exports = User
