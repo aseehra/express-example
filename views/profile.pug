@@ -1,0 +1,15 @@
+html
+  head
+    include _common_header.pug
+  body
+    include _navbar.pug
+    .container
+
+      if (currentUser && currentUser.get('id') === user.get('id'))
+        a.pull-right(href='/edit') Edit your profile
+
+      h1=user.name()
+      h2 Joined on #{user.get('createdAt')}
+
+      if user.has('bio')
+        p=user.get('bio')

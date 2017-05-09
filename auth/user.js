@@ -4,7 +4,7 @@ const User = bookshelf.Model.extend({
   tableName: 'users',
   hasTimestamps: true,
 
-  name: function () {
+  name: function name () {
     return this.get('displayName') || this.get('username')
   }
 })

@@ -5,7 +5,7 @@
     ul.nav.navbar-nav.navbar-right
       if currentUser
         li
-          a(href="/edit") Hello #{currentUser.name}
+          a(href="/edit") Hello #{currentUser.name()}
         li
           a(href="/logout") Log out
       else

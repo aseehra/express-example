@@ -1,6 +1,7 @@
 const express = require('express')
 const passport = require('passport')
 
+const auth = require('./auth/auth')
 const User = require('./auth/user')
 
 const router = express.Router()
@@ -15,7 +16,7 @@ router.use((request, result, next) => {
 router.get('/', (request, result, next) => {
   User.fetchAll()
     .then((users) => {
-      result.render('index', {users: users.toArray()})
+      result.render('index', { users: users.toArray() })
     })
     .catch((err) => {
       next(err)
@@ -45,7 +46,6 @@ router.route('/signup')
       })
       .tap((user) => {
         if (user) {
-          result.send('added')
           next()
         }
       })
@@ -55,5 +55,49 @@ router.route('/signup')
     failureRedirect: '/signup',
     failureFlash: true
   }))
+
+router.get('/users/:username', (request, result, next) => {
+  new User({username: request.params.username})
+    .fetch()
+    .then((user) => {
+      if (!user) { return next(404) }
+      result.render('profile', { user: user })
+    })
+    .catch(next)
+})
+
+router.route('/login')
+  .get((request, result) => {
+    result.render('login')
+  })
+  .post(passport.authenticate('local', {
+    successRedirect: '/',
+    failureRedirect: '/login',
+    failureFlash: true
+  }))
+
+router.get('/logout', (request, result) => {
+  request.logout()
+  result.redirect('/')
+})
+
+router.route('/edit')
+  .all(auth.ensureAuthentication)
+  .get((request, result) => {
+    result.render('edit')
+  })
+  .post((request, result, next) => {
+    request.user
+      .set({
+        displayName: request.body.displayname,
+        bio: request.body.bio
+      })
+      .save()
+      .then((user) => {
+        request.flash('info', 'Profile updated')
+        result.redirect('/edit')
+      })
+      .catch(next)
+  })
 
 module.exports = router

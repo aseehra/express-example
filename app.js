@@ -5,12 +5,16 @@ const express = require('express')
 const expressSession = require('express-session')
 const morgan = require('morgan')
 const path = require('path')
+const passport = require('passport')
 
 const routes = require('./routes')
+const auth = require('./auth/auth')
 
 const app = express()
 app.set('view engine', 'pug')
 app.set('views', path.join(__dirname, 'views'))
+
+auth.setupPassport()
 
 app.use(morgan('short'))
 app.use(bodyParser.urlencoded({extended: false}))
@@ -21,6 +25,9 @@ app.use(expressSession({
   saveUninitialized: true
 }))
 app.use(connectFlash())
+
+app.use(passport.initialize())
+app.use(passport.session())
 
 app.use(routes)
 

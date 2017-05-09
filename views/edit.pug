@@ -1,0 +1,24 @@
+html
+  head
+    include _common_header.pug
+  body
+    include _navbar.pug
+    .container
+      each error in errors
+        .alert.alert-danger(role="alert")= error
+      each info in infos
+        .alert.alert-info(role="alert")= info
+      
+      h1 Edit your profile
+
+      form(action="/edit" method="post")
+        input.form-control(
+          name="displayname"
+          placeholder="Display name"
+          value=currentUser.get('displayName')
+        )
+        textarea.form-control(
+          name="bio"
+          placeholder="Tell us about yourself"
+        )=currentUser.get('bio')
+        input.btn.btn-primary.btn-block(type="submit" value="Update")
