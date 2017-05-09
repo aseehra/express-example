@@ -17,7 +17,20 @@
     "standard": "^10.0.2"
   },
   "dependencies": {
+    "bcrypt-nodejs": "^0.0.3",
+    "bluebird": "^3.5.0",
+    "body-parser": "^1.17.1",
+    "bookshelf": "^0.10.3",
+    "connect-flash": "^0.1.1",
+    "cookie-parser": "^1.4.3",
     "express": "^4.15.2",
-    "morgan": "^1.8.1"
+    "express-session": "^1.15.2",
+    "knex": "^0.13.0",
+    "lodash": "^4.17.4",
+    "morgan": "^1.8.1",
+    "mysql": "^2.13.0",
+    "passport": "^0.3.2",
+    "passport-local": "^1.0.0",
+    "pug": "^2.0.0-rc.1"
   }
 }

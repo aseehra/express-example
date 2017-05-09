@@ -1,0 +1,15 @@
+.nav.navbar-default.navbar-static-top(role='navigation')
+  .container
+    .navbar-header
+      a.navbar-brand(href="/") Learn About Me
+    ul.nav.navbar-nav.navbar-right
+      if currentUser
+        li
+          a(href="/edit") Hello #{currentUser.name}
+        li
+          a(href="/logout") Log out
+      else
+        li
+          a(href="/login") Log in
+        li
+          a(href="/signup") Sign up
