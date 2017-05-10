@@ -6,7 +6,7 @@ import app from '../app'
 let request
 
 test.beforeEach((t) => {
-  request = supertest(app())
+  request = supertest(app.build())
     .get('/')
     .set('User-Agent', 'my cool browser')
     .set('Accept', 'text/plain')
