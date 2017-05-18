@@ -15,10 +15,10 @@ html
         input.form-control(
           name="displayname"
           placeholder="Display name"
-          value=currentUser.get('displayName')
+          value=currentUser.displayName
         )
         textarea.form-control(
           name="bio"
           placeholder="Tell us about yourself"
-        )=currentUser.get('bio')
+        )=currentUser.bio
         input.btn.btn-primary.btn-block(type="submit" value="Update")

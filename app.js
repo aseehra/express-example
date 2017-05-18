@@ -3,6 +3,7 @@ const cookieParser = require('cookie-parser')
 const connectFlash = require('connect-flash')
 const express = require('express')
 const expressSession = require('express-session')
+const mongoose = require('mongoose')
 const morgan = require('morgan')
 const path = require('path')
 const passport = require('passport')
@@ -13,6 +14,9 @@ const auth = require('./auth/auth')
 const app = express()
 app.set('view engine', 'pug')
 app.set('views', path.join(__dirname, 'views'))
+
+mongoose.Promise = require('bluebird')
+mongoose.connect('mongodb://localhost:27017/expressbook')
 
 auth.setupPassport()
 

@@ -14,7 +14,7 @@ html
       each user in users
         .panel.panel-default
           .panel-heading
-            a(href=`/users/${user.get('username')}`) #{user.name()}
+            a(href=`/users/${user.username}`) #{user.name()}
           if user.bio
             .panel-body
               user.bio

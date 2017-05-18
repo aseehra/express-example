@@ -14,13 +14,13 @@ router.use((request, result, next) => {
 })
 
 router.get('/', (request, result, next) => {
-  User.fetchAll()
+  User
+    .find()
+    .sort({ createdAt: 'descending' })
     .then((users) => {
-      result.render('index', { users: users.toArray() })
+      result.render('index', {users: users})
     })
-    .catch((err) => {
-      next(err)
-    })
+    .catch(next)
 })
 
 router.route('/signup')
@@ -31,7 +31,7 @@ router.route('/signup')
     const username = request.body.username
     const password = request.body.password
 
-    new User({username: username}).fetch()
+    User.findOne({ username: username })
       .then((user) => {
         if (user) {
           request.flash('error', 'User already exists')
@@ -42,14 +42,10 @@ router.route('/signup')
           username: username,
           password: password
         })
+
         return newUser.save()
       })
-      .tap((user) => {
-        if (user) {
-          next()
-        }
-      })
-      .catch(next)
+      .then(next, next)
   }, passport.authenticate('local', {
     successRedirect: '/',
     failureRedirect: '/signup',
@@ -57,11 +53,10 @@ router.route('/signup')
   }))
 
 router.get('/users/:username', (request, result, next) => {
-  new User({username: request.params.username})
-    .fetch()
+  User.findOne({ username: request.params.username})
     .then((user) => {
       if (!user) { return next(404) }
-      result.render('profile', { user: user })
+      result.render('profile', { user: user})
     })
     .catch(next)
 })
@@ -87,11 +82,9 @@ router.route('/edit')
     result.render('edit')
   })
   .post((request, result, next) => {
+    request.user.displayName = request.body.displayname
+    request.user.bio = request.body.bio
     request.user
-      .set({
-        displayName: request.body.displayname,
-        bio: request.body.bio
-      })
       .save()
       .then((user) => {
         request.flash('info', 'Profile updated')

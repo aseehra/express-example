@@ -5,29 +5,31 @@ const User = require('./user')
 
 const setupPassport = function setupPassport () {
   passport.serializeUser((user, done) => {
-    done(null, user.get('id'))
+    console.log(user._id)
+    console.log(user.id)
+    done(null, user.id)
   })
 
   passport.deserializeUser((id, done) => {
-    new User({id: id})
-      .fetch()
-      .then((user) => {
-        done(null, user)
-      })
-      .catch(done)
+    User.findById(id, done)
   })
 
   const localStrategy = new LocalStrategy((username, password, done) => {
-    new User({username: username})
-      .fetch()
+    User
+      .findOne({ username: username })
       .then((user) => {
         if (!user) {
           return done(null, false, { message: 'Invalid username' })
         }
-        if (user.get('password') !== password) {
-          return done(null, false, { message: 'Invalid password' })
-        }
-        done(null, user)
+
+        user.checkPassword(password)
+          .then((passwordMatches) => {
+            if (!passwordMatches) {
+              return done(null, false, { message: 'Invalid password' })
+            }
+
+            done(null, user)
+          })
       })
       .catch(done)
   })
